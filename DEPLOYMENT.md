@@ -17,7 +17,15 @@ Frontend mac dinh goi API cung domain qua cac endpoint `/api/v1/...`, nen khi de
 
 ## 1. Chuan bi MySQL cloud
 
-Tao mot MySQL database rong tren Railway, Aiven, PlanetScale, TiDB Cloud, Render, hoac nha cung cap MySQL bat ky.
+Khuyen nghi dung Aiven for MySQL Free vi day la MySQL that, co ho tro trigger va co goi mien phi. Khong dung TiDB hoac PlanetScale cho ban deploy hien tai vi cac Flyway migration cua du an co `CREATE TRIGGER`.
+
+1. Dang ky tai `https://console.aiven.io`.
+2. Tao project moi, vi du `research-management`.
+3. Chon Services -> Create service -> MySQL.
+4. Chon plan `Free`, region gan Viet Nam nhat, dat ten service `research-management-mysql`.
+5. Doi den khi trang thai service la `Running`.
+6. Vao Databases -> Create database -> dat ten `research_management_db`.
+7. Vao Overview -> Connection information va luu lai Host, Port, User, Password.
 
 Khong can import schema thu cong. Backend se tu chay Flyway migrations `V1` den `V15` khi start lan dau.
 
@@ -29,12 +37,14 @@ Vao Vercel Project -> Settings -> Environment Variables, them cac key sau cho Pr
 
 ```env
 SPRING_PROFILES_ACTIVE=prod
-SPRING_DATASOURCE_URL=jdbc:mysql://<HOST>:<PORT>/<DATABASE>?useSSL=true&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true
+SPRING_DATASOURCE_URL=jdbc:mysql://<HOST>:<PORT>/research_management_db?sslMode=REQUIRED&serverTimezone=Asia/Ho_Chi_Minh
 SPRING_DATASOURCE_USERNAME=<MYSQL_USERNAME>
 SPRING_DATASOURCE_PASSWORD=<MYSQL_PASSWORD>
 JWT_SECRET=<BASE64_64_BYTE_SECRET>
-CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>.vercel.app
+CORS_ALLOWED_ORIGINS=*
 ```
+
+Sau khi deploy thanh cong va co URL that, doi `CORS_ALLOWED_ORIGINS` thanh `https://<url-that>.vercel.app` va redeploy.
 
 Email la tuy chon. Neu muon chuc nang gui email that, them:
 
@@ -58,7 +68,9 @@ openssl rand -base64 64
 2. Vao Vercel -> Add New -> Project -> Import Git Repository.
 3. Chon repo nay.
 4. Root Directory: de mac dinh la thu muc goc repo.
-5. Deploy.
+5. Framework Preset: chon `Services`.
+6. Them cac bien moi truong o muc tren cho moi truong `Production`.
+7. Deploy.
 
 Vercel se doc `vercel.json` o thu muc goc va build 2 container:
 

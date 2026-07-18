@@ -2,11 +2,11 @@
   "services": {
     "frontend": {
       "root": "PTHTW_FrontEnd",
-      "entrypoint": "Dockerfile.vercel"
+      "runtime": "container"
     },
     "backend": {
       "root": "PTHTW_BackEnd",
-      "entrypoint": "Dockerfile.vercel"
+      "runtime": "container"
     }
   },
   "rewrites": [

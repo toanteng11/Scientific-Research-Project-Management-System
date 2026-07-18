@@ -54,7 +54,7 @@ public class SecurityConfig {
                             + "(comma-separated origins) or app.cors.allowed-origins in configuration.");
         }
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(origins);
+        config.setAllowedOriginPatterns(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setAllowCredentials(true);

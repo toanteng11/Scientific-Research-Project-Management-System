@@ -19,14 +19,18 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
  *
  * Configuration:
  *   baseURL    : Spring Boot API gateway root.
- *   timeout    : 15 000 ms — hard cap to abort stalled requests during upstream outages.
+ *   timeout    : Configurable via VITE_API_TIMEOUT_MS. Production allows enough
+ *                time for a cold Spring Boot container to become ready.
  *   headers    : Content-Type defaults to application/json. Multipart requests must
  *                override this per-call by passing { headers: { 'Content-Type': undefined } }
  *                to allow Axios to auto-set the multipart boundary.
  *
  * Interceptors are attached immediately after instance creation (see below).
  */
-const REQUEST_TIMEOUT_MS = 15000;
+const configuredTimeout = Number(import.meta.env.VITE_API_TIMEOUT_MS);
+const REQUEST_TIMEOUT_MS = Number.isFinite(configuredTimeout) && configuredTimeout > 0
+  ? configuredTimeout
+  : (import.meta.env.PROD ? 180000 : 15000);
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

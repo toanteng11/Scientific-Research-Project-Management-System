@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    # Tối ưu cho kiến trúc ARM64 (Apple Silicon M1/M2/M3)
+    image: mysql:8.0-oracle 
+    container_name: pthtw_mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mat_khau_cua_ban
+      MYSQL_DATABASE: research_management_db
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      # Ánh xạ: [Cổng máy Mac] : [Cổng nội bộ Container]
+      - "3307:3306"
+    volumes:
+      # Khối lượng lưu trữ dữ liệu vĩnh viễn (Persist data)
+      - mysql_data:/var/lib/mysql
+      # ĐIỂM TIÊM KIẾN TRÚC: Tự động nạp dữ liệu hạt giống (Seed Data)
+      - ./init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=caching_sha2_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mysql_data:

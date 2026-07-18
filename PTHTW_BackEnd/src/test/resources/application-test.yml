@@ -1,0 +1,49 @@
+spring:
+  # ===================================================================
+  # 1. IN-MEMORY H2 DATABASE — replaces MySQL for integration tests
+  # MODE=MySQL enables AUTO_INCREMENT, TINYINT(1), UNIQUE KEY, etc.
+  # DB_CLOSE_DELAY=-1 keeps the database alive for the full test run.
+  # NON_KEYWORDS=VALUE avoids conflicts with H2 2.x reserved keywords.
+  # ===================================================================
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL;NON_KEYWORDS=VALUE
+    driver-class-name: org.h2.Driver
+    username: root
+    password: "Mysql@12345678900"
+
+  # ===================================================================
+  # 2. JPA — validate schema against H2, suppress verbose SQL output
+  # ===================================================================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  # ===================================================================
+  # 3. FLYWAY — points to the H2-compatible test migrations directory.
+  # These scripts mirror V1/V2 but without MySQL triggers (DELIMITER //).
+  # ===================================================================
+  flyway:
+    enabled: true
+    locations: classpath:db/h2-migration
+    baseline-on-migrate: false
+
+# ===================================================================
+# 4. APPLICATION PROPERTIES — identical to production for correctness
+# ===================================================================
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expiration: 86400000
+    refresh-expiration: 604800000
+  upload:
+    dir: target/test-uploads
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

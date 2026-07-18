@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0-oracle
+    container_name: nckh-mysql-prod
+    restart: always
+    environment:
+      MYSQL_DATABASE: research_management_db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      # Đồng bộ hóa cấu trúc cơ sở dữ liệu: Tự động chạy các kịch bản trong thư mục init của bạn
+      - ../database/init:/docker-entrypoint-initdb.d
+
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: nckh-backend-prod
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/research_management_db?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - CORS_ALLOWED_ORIGINS=*
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+
+volumes:
+  db_data:

@@ -1,0 +1,90 @@
+# ==========================================
+# MASTER .GITIGNORE FOR PTHTW SYSTEM (MONOREPO)
+# ==========================================
+
+# 1. He dieu hanh (OS files)
+# ------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# 2. Cong cu lap trinh (IDE & editors)
+# ------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+
+# 3. Bao mat va moi truong (secrets & env)
+# ------------------------------------------
+# Khong commit file chua mat khau, token, hoac secret.
+.env
+.env.*
+!.env.example
+!.env.production.example
+*.pem
+*.key
+application-secret.yml
+
+# 4. Frontend (ReactJS / Node.js)
+# ------------------------------------------
+# Ap dung cho PTHTW_FrontEnd va cac thu muc Node khac.
+node_modules/
+dist/
+build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+.parcel-cache/
+
+# 5. Backend (Spring Boot / Java / Maven)
+# ------------------------------------------
+# Ap dung cho PTHTW_BackEnd va cac thu muc Maven/Java khac.
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.log
+uploads/
+attachments/
+.m2/
+.vercel/
+
+# 6. Du lieu Docker va database local
+# ------------------------------------------
+mysql_data/
+db_data/
+pgdata/
+
+# 7. Tai lieu tam, bao cao, va log thuc thi
+# ------------------------------------------
+# Bo qua cac Markdown tam nhu debug/log/report.
+*debug*.md
+*log*.md
+*report*.md
+# Bo qua cac file cau hinh Postman noi bo neu co.
+*postman_collection.json
+*postman_environment.json
+
+# ==========================================
+# Luu y cho team: cac file duoc phep commit (ngoai le)
+# ==========================================
+# Giu lai tai lieu goc va cau hinh deploy.
+!README.md
+!DEPLOYMENT.md
+!PTHTW_FrontEnd/README.md
+!PTHTW_BackEnd/HELP.md
+
+# Lap lai de bao ve file secret o moi vi tri.
+.env
